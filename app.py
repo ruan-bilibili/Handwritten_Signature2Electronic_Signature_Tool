@@ -91,7 +91,7 @@ def main():
             # 下载按钮点击后显示介绍信息和图片
             st.markdown("---")
             money = Image.open("Image/2.jpg")  #
-            st.image(money, caption="关于我们", use_column_width=True)
+            st.image(money, caption="打赏一下吧！", use_column_width=True)
             st.write("""
             谢谢你使用我的作品！如果觉得好用的话，看在UP这么无私奉献的份上，可否支持下UP呢？我会更加努力做出更好更实用的作品的！
             """)
