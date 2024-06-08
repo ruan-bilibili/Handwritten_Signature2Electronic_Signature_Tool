@@ -39,7 +39,7 @@ st.markdown(
     """
     <style>
     .main {
-        background-color: #F3E5F5;
+        background-color: ##FFFFFF;
         color: #8E24AA;
     }
     .stButton button {
@@ -63,7 +63,7 @@ def main():
     # 侧边栏个人介绍
     st.sidebar.title("关于我")
     profile_image = Image.open("Image/1.png")  # 替换为你的个人图片路径
-    st.sidebar.image(profile_image, use_column_width=True)
+    #st.sidebar.image(profile_image, use_column_width=True)
     st.sidebar.write("""
     大家好，我是阮同学，目前在北京师范大学攻读博士。我平时喜欢编程捣鼓一些有趣的玩意儿。如果你有什么新奇的想法或者对我的作品有什么改进建议，欢迎告诉我！\n商务与学习交流：ruan_bilibili@163.com
     """)
