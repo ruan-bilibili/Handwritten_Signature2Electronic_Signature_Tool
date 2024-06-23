@@ -67,11 +67,10 @@ def main():
         "证件照处理网站": "https://quickidphoto.streamlit.app",
         "科研绘图网站": "https://scidraw.streamlit.app"
     }
-    option = st.selectbox("选择一个网站", list(websites.keys()))
-    if st.button("访问网站"):
+    option = st.sidebar.selectbox("选择一个网站", list(websites.keys()))
+    if st.sidebar.button("访问网站"):
         url = websites[option]
-        st.experimental_set_query_params(url=url)
-        #st.markdown(f'<meta http-equiv="refresh" content="0; url={url}" />', unsafe_allow_html=True)
+        st.sidebar.experimental_set_query_params(url=url)
 
     
     # 侧边栏个人介绍
