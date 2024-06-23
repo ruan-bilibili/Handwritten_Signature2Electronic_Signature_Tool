@@ -3,6 +3,7 @@ import cv2
 from PIL import Image
 import numpy as np
 from io import BytesIO
+import base64
 
 def convert_signature_to_transparent_png(input_image):
     # 读取图片
