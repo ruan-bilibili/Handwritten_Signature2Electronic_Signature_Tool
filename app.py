@@ -71,6 +71,7 @@ def main():
     if st.sidebar.button("访问网站"):
         url = websites[option]
         st.sidebar.experimental_set_query_params(url=url)
+        st.markdown(f'<meta http-equiv="refresh" content="0; url={url}" />', unsafe_allow_html=True)
 
     
     # 侧边栏个人介绍
