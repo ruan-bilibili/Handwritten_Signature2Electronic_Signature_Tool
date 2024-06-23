@@ -67,7 +67,28 @@ def main():
     st.sidebar.write("""
     大家好，我是阮同学，目前在北京师范大学攻读博士。我平时喜欢编程捣鼓一些有趣的玩意儿。如果你有什么新奇的想法或者对我的作品有什么改进建议，欢迎告诉我！\n商务与学习交流：ruan_bilibili@163.com
     """)
-
+    # 定义滚动字幕的HTML和CSS
+    scrolling_text = """
+    <div style="overflow: hidden; white-space: nowrap;">
+      <div style="display: inline-block; padding-left: 100%; animation: scroll-left 30s linear infinite;font-size: 24px;">
+        长期接定制化科研作图，联系方式：ruan_bilibili@163.com。
+      </div>
+    </div>
+    
+    <style>
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+    </style>
+    """
+    
+    # 在Streamlit应用中显示滚动字幕
+    st.markdown(scrolling_text, unsafe_allow_html=True)
     st.title("手写签名转换为电子签名工具")
     uploaded_file = st.file_uploader("请选择一张手写签名图片", type=["jpg", "jpeg", "png"], help="支持的文件类型: jpg, jpeg, png. 最大文件大小: 10MB")
 
