@@ -62,8 +62,8 @@ st.markdown(
 def main():
     # 侧边栏个人介绍
     st.sidebar.title("关于我")
-    #profile_image = Image.open("Image/1.png")  # 替换为你的个人图片路径
-    profile_image = Image.open("Image/me2.png")  # 替换为你的个人图片路径
+    profile_image = Image.open("Image/1.png")  # 替换为你的个人图片路径
+    #profile_image = Image.open("Image/me2.png")  # 替换为你的个人图片路径
     # 将图像转换为 base64 编码
     buffered = BytesIO()
     profile_image.save(buffered, format="PNG")
