@@ -69,7 +69,14 @@ def main():
     profile_image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
     # 使用st.markdown和HTML/CSS显示图像并使其居中
-    st.sidebar.markdown(f"""<div style="text-align: center;"><img src="data:image/png;base64,{img_str}" style="width: 150px; border-radius: 50%;"></div>""",unsafe_allow_html=True)
+    st.sidebar.markdown(
+        f"""
+        <div style="text-align: center;">
+            <img src="data:image/png;base64,{img_str}" style="width: 150px; border-radius: 50%;">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     
     st.sidebar.write("""
     大家好，我是阮同学，目前在北京师范大学攻读博士。我平时喜欢编程捣鼓一些有趣的玩意儿。如果你有什么新奇的想法或者对我的作品有什么改进建议，欢迎告诉我！\n商务与学习交流：ruan_bilibili@163.com
