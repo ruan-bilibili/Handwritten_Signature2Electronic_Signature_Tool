@@ -4,6 +4,7 @@ from PIL import Image
 import numpy as np
 from io import BytesIO
 import base64
+from streamlit_js_eval import streamlit_js_eval
 
 def convert_signature_to_transparent_png(input_image):
     # 读取图片
@@ -63,15 +64,24 @@ st.markdown(
 def main():
     #侧边扩展栏
     st.sidebar.title("目前已开发的网站，欢迎使用！")
+    
     websites = {
         "证件照处理网站": "https://quickidphoto.streamlit.app",
         "科研绘图网站": "https://scidraw.streamlit.app"
     }
-    option = st.sidebar.selectbox("选择一个网站", list(websites.keys()))
+    option = st.sidebar.selectbox("选择网站", list(websites.keys()))
+    
     if st.sidebar.button("访问网站"):
         url = websites[option]
-        st.sidebar.experimental_set_query_params(url=url)
-        st.markdown(f'<meta http-equiv="refresh" content="0; url={url}" />', unsafe_allow_html=True)
+        # 尝试在新标签页中打开链接
+        streamlit_js_eval(js_expressions=f"window.open('{url}', '_blank')", key="js_eval")
+        # 显示备用链接
+        st.sidebar.markdown(f'<a href="{url}" target="_self">点击这里跳转到 {option}</a>', unsafe_allow_html=True)
+    else:
+        # 保留备用链接
+        st.sidebar.markdown(f'<a href="{websites[option]}" target="_self">如果无法自动跳网站，点击这里</a>', unsafe_allow_html=True)
+    
+
 
     
     # 侧边栏个人介绍
