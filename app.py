@@ -67,6 +67,7 @@ def main():
     st.sidebar.write("""
     大家好，我是阮同学，目前在北京师范大学攻读博士。我平时喜欢编程捣鼓一些有趣的玩意儿。如果你有什么新奇的想法或者对我的作品有什么改进建议，欢迎告诉我！\n商务与学习交流：ruan_bilibili@163.com
     """)
+    ##滚动字幕
     # 定义滚动字幕的HTML和CSS
     scrolling_text = """
     <div style="overflow: hidden; white-space: nowrap;">
