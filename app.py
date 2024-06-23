@@ -61,6 +61,19 @@ st.markdown(
 
 
 def main():
+    #侧边扩展栏
+    st.sidebar.title("目前已开发的网站，欢迎使用！")
+    websites = {
+        "证件照处理网站": "https://quickidphoto.streamlit.app",
+        "科研绘图网站": "https://scidraw.streamlit.app"
+    }
+    option = st.selectbox("选择一个网站", list(websites.keys()))
+    if st.button("访问网站"):
+        url = websites[option]
+        st.experimental_set_query_params(url=url)
+        #st.markdown(f'<meta http-equiv="refresh" content="0; url={url}" />', unsafe_allow_html=True)
+
+    
     # 侧边栏个人介绍
     st.sidebar.title("关于我")
     #profile_image = Image.open("Image/1.png")  # 替换为你的个人图片路径
