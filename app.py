@@ -113,35 +113,9 @@ def main():
     st.markdown(scrolling_text, unsafe_allow_html=True)
     st.title("手写签名转换为电子签名工具")
 
-    choice = st.radio("选择操作模式", ("在线签名", "上传签名照片"))
+    choice = st.radio("选择操作模式", ("上传签名照片", "在线签名"))
 
-    if choice == "在线签名":
-        st.subheader("在线签名")
-        canvas_result = st_canvas(
-            fill_color="white",
-            stroke_width=3,
-            stroke_color="black",
-            background_color="white",
-            width=400,
-            height=400,
-            drawing_mode="freedraw",
-            key="canvas",
-        )
-        
-        if st.button("保存签名"):
-            if canvas_result.image_data is not None:
-                img = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
-                buf = BytesIO()
-                img.save(buf, format="PNG")
-                byte_im = buf.getvalue()
-                st.download_button(
-                    label="下载电子签名",
-                    data=byte_im,
-                    file_name="电子签名.png",
-                    mime="image/png"
-                )
-    
-    elif choice == "上传签名照片":
+    if choice == "上传签名照片":
         st.subheader("上传签名照片")
         uploaded_file = st.file_uploader("请选择一张手写签名图片", type=["jpg", "jpeg", "png"], help="支持的文件类型: jpg, jpeg, png. 最大文件大小: 10MB")
 
@@ -166,6 +140,32 @@ def main():
                 st.write("""
                 谢谢你使用我的作品！如果觉得好用的话，看在UP这么无私奉献的份上，可否支持下UP呢？我会更加努力做出更好更实用的作品的！
                 """)
+
+    elif choice == "在线签名":
+        st.subheader("在线签名")
+        canvas_result = st_canvas(
+            fill_color="white",
+            stroke_width=3,
+            stroke_color="black",
+            background_color="white",
+            width=400,
+            height=400,
+            drawing_mode="freedraw",
+            key="canvas",
+        )
+        
+        if st.button("保存签名"):
+            if canvas_result.image_data is not None:
+                img = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
+                buf = BytesIO()
+                img.save(buf, format="PNG")
+                byte_im = buf.getvalue()
+                st.download_button(
+                    label="下载电子签名",
+                    data=byte_im,
+                    file_name="电子签名.png",
+                    mime="image/png"
+                )
 
 if __name__ == "__main__":
     main()
