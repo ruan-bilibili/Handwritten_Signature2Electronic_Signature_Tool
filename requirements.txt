@@ -34,6 +34,7 @@ setuptools==70.0.0
 six==1.16.0
 smmap==5.0.1
 streamlit==1.35.0
+streamlit_drawable_canvas-0.9.3
 streamlit-js-eval==0.1.7
 tenacity==8.3.0
 toml==0.10.2
