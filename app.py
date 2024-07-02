@@ -5,6 +5,7 @@ import numpy as np
 from io import BytesIO
 import base64
 from streamlit_js_eval import streamlit_js_eval
+from streamlit_drawable_canvas import st_canvas
 
 def convert_signature_to_transparent_png(input_image):
     # 读取图片
@@ -14,7 +15,6 @@ def convert_signature_to_transparent_png(input_image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
     # 应用二值化处理
-    # 使用OTSU自动阈值
     _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
     
     # 创建一个RGBA图像（具有透明通道）
@@ -31,10 +31,6 @@ def convert_signature_to_transparent_png(input_image):
                 pixels[j, i] = (0, 0, 0, 0)  # 透明
     
     return transparent_image
-
-
-
-
 
 # 设置配色方案
 st.markdown(
@@ -59,10 +55,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-
 def main():
-    #侧边扩展栏
+    # 侧边扩展栏
     st.sidebar.title("目前已开发的网站，欢迎使用！")
     
     websites = {
@@ -73,26 +67,17 @@ def main():
     
     if st.sidebar.button("访问网站"):
         url = websites[option]
-        # 尝试在新标签页中打开链接
         streamlit_js_eval(js_expressions=f"window.open('{url}', '_blank')", key="js_eval")
-        # 显示备用链接
         st.sidebar.markdown(f'<a href="{url}" target="_self">点击这里跳转到 {option}</a>', unsafe_allow_html=True)
     else:
-        # 保留备用链接
         st.sidebar.markdown(f'<a href="{websites[option]}" target="_self">如果无法自动跳网站，点击这里</a>', unsafe_allow_html=True)
-    
-
-
     
     # 侧边栏个人介绍
     st.sidebar.title("关于我")
-    #profile_image = Image.open("Image/1.png")  # 替换为你的个人图片路径
-    profile_image = Image.open("Image/me2.png")  # 替换为你的个人图片路径
-    # 将图像转换为 base64 编码
+    profile_image = Image.open("Image/me2.png")
     buffered = BytesIO()
     profile_image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
-    # 使用st.markdown和HTML/CSS显示图像并使其居中
     st.sidebar.markdown(
         f"""
         <div style="text-align: center;">
@@ -105,8 +90,7 @@ def main():
     st.sidebar.write("""
     大家好，我是阮同学，目前在北京师范大学攻读博士。我平时喜欢编程捣鼓一些有趣的玩意儿。如果你有什么新奇的想法或者对我的作品有什么改进建议，欢迎告诉我！\n商务与学习交流：ruan_bilibili@163.com
     """)
-    ##滚动字幕
-    # 定义滚动字幕的HTML和CSS
+
     scrolling_text = """
     <div style="overflow: hidden; white-space: nowrap;">
       <div style="display: inline-block; padding-left: 100%; animation: scroll-left 30s linear infinite;font-size: 24px;">
@@ -126,48 +110,62 @@ def main():
     </style>
     """
     
-    # 在Streamlit应用中显示滚动字幕
     st.markdown(scrolling_text, unsafe_allow_html=True)
     st.title("手写签名转换为电子签名工具")
-    uploaded_file = st.file_uploader("请选择一张手写签名图片", type=["jpg", "jpeg", "png"], help="支持的文件类型: jpg, jpeg, png. 最大文件大小: 10MB")
 
-    if uploaded_file is not None:
-        input_image = Image.open(uploaded_file)
-        result_image = convert_signature_to_transparent_png(input_image)
+    choice = st.radio("选择操作模式", ("在线签名", "上传签名照片"))
+
+    if choice == "在线签名":
+        st.subheader("在线签名")
+        canvas_result = st_canvas(
+            fill_color="white",
+            stroke_width=3,
+            stroke_color="black",
+            background_color="white",
+            width=400,
+            height=400,
+            drawing_mode="freedraw",
+            key="canvas",
+        )
         
-        # 显示结果
-        st.image(result_image, caption='处理后的签名', use_column_width=True)
-        
-        # 保存按钮
-        buf = BytesIO()
-        result_image.save(buf, format="PNG")
-        byte_im = buf.getvalue()
-        if st.download_button(
-            label="下载电子签名",
-            data=byte_im,
-            file_name="电子签名.png",
-            mime="image/png"
-        ):
-            # 下载按钮点击后显示介绍信息和图片
-            st.markdown("---")
-            money = Image.open("Image/2.jpg")  #
-            st.image(money, caption="打赏一下吧！", use_column_width=True)
-            st.write("""
-            谢谢你使用我的作品！如果觉得好用的话，看在UP这么无私奉献的份上，可否支持下UP呢？我会更加努力做出更好更实用的作品的！
-            """)
+        if st.button("保存签名"):
+            if canvas_result.image_data is not None:
+                img = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
+                buf = BytesIO()
+                img.save(buf, format="PNG")
+                byte_im = buf.getvalue()
+                st.download_button(
+                    label="下载电子签名",
+                    data=byte_im,
+                    file_name="电子签名.png",
+                    mime="image/png"
+                )
+    
+    elif choice == "上传签名照片":
+        st.subheader("上传签名照片")
+        uploaded_file = st.file_uploader("请选择一张手写签名图片", type=["jpg", "jpeg", "png"], help="支持的文件类型: jpg, jpeg, png. 最大文件大小: 10MB")
+
+        if uploaded_file is not None:
+            input_image = Image.open(uploaded_file)
+            result_image = convert_signature_to_transparent_png(input_image)
+            
+            st.image(result_image, caption='处理后的签名', use_column_width=True)
+            
+            buf = BytesIO()
+            result_image.save(buf, format="PNG")
+            byte_im = buf.getvalue()
+            if st.download_button(
+                label="下载电子签名",
+                data=byte_im,
+                file_name="电子签名.png",
+                mime="image/png"
+            ):
+                st.markdown("---")
+                money = Image.open("Image/2.jpg")
+                st.image(money, caption="打赏一下吧！", use_column_width=True)
+                st.write("""
+                谢谢你使用我的作品！如果觉得好用的话，看在UP这么无私奉献的份上，可否支持下UP呢？我会更加努力做出更好更实用的作品的！
+                """)
 
 if __name__ == "__main__":
     main()
-
-
-
-
-    
-    
-    
-
-#ruan_bilibili@163.com
-#https://space.bilibili.com/76702965
-#
-
-#python /nfs/home/1002_sunbo/RW_Experiments/Personal_project/Github_Handwritten_Signature2Electronic_Signature_Tool/app.py
