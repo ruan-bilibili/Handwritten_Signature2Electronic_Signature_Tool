@@ -166,6 +166,10 @@ def main():
                     file_name="电子签名.png",
                     mime="image/png"
                 )
+    st.write("""
+                此签名不具有法律效力。
+                """)
+    
 
 if __name__ == "__main__":
     main()
