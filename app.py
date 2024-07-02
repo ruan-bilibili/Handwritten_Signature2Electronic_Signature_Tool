@@ -118,7 +118,7 @@ def main():
     if choice == "在线签名":
         st.subheader("在线签名")
         canvas_result = st_canvas(
-            fill_color="rgba(255, 255, 255, 0)",
+            fill_color="white",
             stroke_width=3,
             stroke_color="black",
             background_color="white",
@@ -126,7 +126,6 @@ def main():
             height=400,
             drawing_mode="freedraw",
             key="canvas",
-            update_streamlit=True  # 确保画布实时更新
         )
         
         if st.button("保存签名"):
